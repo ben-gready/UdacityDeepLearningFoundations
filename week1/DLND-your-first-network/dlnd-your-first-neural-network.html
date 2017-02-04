@@ -13339,7 +13339,7 @@ height=263
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[284]:</div>
+<div class="prompt input_prompt">In&nbsp;[292]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -13402,35 +13402,42 @@ height=263
         <span class="c1">#### Implement the backward pass here ####</span>
         <span class="c1">### Backward pass ###</span>
         
-        <span class="c1"># Some feedback: I feel that i have a reasonable understanding of the back probagation process now, </span>
-        <span class="c1"># but I find the udacity lecture notes to not be that intuitive.  I appreciated the feedback you gave </span>
-        <span class="c1"># me after my first try at submitting (which had correct end results, but problems with implementation).  </span>
-        <span class="c1"># I have taken the advice given in the feedback, and re-implemented as suggested by the reviewer, however </span>
-        <span class="c1"># I don&#39;t find it to be an intuitive progression. I have coppied that version at the bottom of the notebook, </span>
-        <span class="c1"># but  I found it to be much easier and clearer to me, when I implement the steps described in here:</span>
-        <span class="c1"># http://neuralnetworksanddeeplearning.com/chap2.html (one of your suggested reading, which is great b.t.w.).</span>
-        <span class="c1"># Unless I&#39;m missing something, it seems that the definitions that you provide are different from the ones </span>
-        <span class="c1"># in the above link (particularly the *_grad variables), and I&#39;m wondering whether there </span>
-        <span class="c1"># is an accepted norm, or whether nomenclature for the &quot;internals&quot; of the algorithm are actually still fairly ad-hoc</span>
-        <span class="c1"># Whichever is the norm, at this point, I find the layout I have followed to be more intuitive at this point, </span>
-        <span class="c1"># however, I&#39;d be happy to be enlightened if there is something I have missed in the way it  :)</span>
+        <span class="c1"># Some feedback: I feel that i have a reasonable understanding of the back probagation </span>
+        <span class="c1"># process now, but I find the udacity lecture notes to not be that intuitive.  </span>
+        <span class="c1"># I appreciated the feedback you gave me after my first try at submitting (which had </span>
+        <span class="c1"># correct end results, but problems with implementation). I have taken the advice given </span>
+        <span class="c1"># in the feedback, and re-implemented as suggested by the reviewer, however I don&#39;t find </span>
+        <span class="c1"># it to be an intuitive progression. I have coppied that version at the bottom of the </span>
+        <span class="c1"># notebook, but  I found it to be much easier and clearer to me, when I implement the </span>
+        <span class="c1"># steps described in here: http://neuralnetworksanddeeplearning.com/chap2.html (one of </span>
+        <span class="c1"># your suggested reading, which is great b.t.w.).</span>
+        <span class="c1"># Unless I&#39;m missing something, it seems that the definitions that you provide are </span>
+        <span class="c1"># different from the ones in the above link (particularly the *_grad variables), and </span>
+        <span class="c1"># I&#39;m wondering whether there is an accepted norm, or whether nomenclature for the </span>
+        <span class="c1"># &quot;internals&quot; of the algorithm are actually still fairly ad-hoc Whichever is the norm, </span>
+        <span class="c1"># at this point, I find the layout I have followed to be more intuitive at this point, </span>
+        <span class="c1"># however, I&#39;d be happy to be enlightened if there is something I&#39;m missing  :)</span>
          
         <span class="c1"># TODO: Output error</span>
-        <span class="c1"># output_errors = targets - final_outputs # Output layer error is the difference between desired target and actual output.</span>
-        <span class="c1"># I got marked down for not using the above line last time, but I just can&#39;t get on board with defining it this way, </span>
-        <span class="c1"># I&#39;m keen to know if I&#39;m missing something here, but it seems much more intuitive to define it as in BP1 in:</span>
-        <span class="c1"># http://neuralnetworksanddeeplearning.com/chap2.html</span>
-        <span class="c1"># it of course works if I use the above, and then remove the negative signs in the weight updates, but I think leaving it this</span>
-        <span class="c1"># way is more intuitive and helps my understanding -- please let me know if I I&#39;m missing something important here!</span>
+        <span class="c1"># output_errors = targets - final_outputs # Output layer error is the difference between </span>
+        <span class="c1"># desired target and actual output. I got marked down for not using the above line </span>
+        <span class="c1"># last time, but I just can&#39;t get on board with defining it this way, I&#39;m keen to know </span>
+        <span class="c1"># if I&#39;m missing something here, but it seems much more intuitive to define it as in BP1 in:</span>
+        <span class="c1"># http://neuralnetworksanddeeplearning.com/chap2.html it of course works if I use the above, </span>
+        <span class="c1"># and then remove the negative signs in the weight updates, but I think leaving it this</span>
+        <span class="c1"># way is more intuitive and helps my understanding -- please let me know if I I&#39;m </span>
+        <span class="c1"># missing something important here!</span>
         
         <span class="c1"># output_error = del_a_E * f_primed(a_L), where f_primed(z_L) = 1 since f(x) = x for the output layer</span>
         <span class="c1"># first find del_a_E (differential of cost w.r.t. output activation)</span>
         <span class="n">del_a_E</span> <span class="o">=</span> <span class="n">final_outputs</span> <span class="o">-</span> <span class="n">targets</span>
 
         <span class="c1"># output_error is BP1 from http://neuralnetworksanddeeplearning.com/chap2.html</span>
-        <span class="n">output_errors</span> <span class="o">=</span> <span class="n">del_a_E</span> <span class="o">*</span> <span class="n">linear_primed</span><span class="p">(</span><span class="n">final_outputs</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># linear_primed is 1 because of form of activation function</span>
+        <span class="n">output_errors</span> <span class="o">=</span> <span class="n">del_a_E</span> <span class="o">*</span> <span class="n">linear_primed</span><span class="p">(</span><span class="n">final_outputs</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># linear_primed is 1 because</span>
+        <span class="c1"># of form of activation function</span>
 
-        <span class="c1"># output grad is differential of cost w.r.t. W_hidden_to_out (it&#39;s not clear to me whether this that is what Udacity intended)</span>
+        <span class="c1"># output grad is differential of cost w.r.t. W_hidden_to_out (it&#39;s not clear to me </span>
+        <span class="c1"># whether this that is what Udacity intended)</span>
         <span class="c1"># BP4 from http://neuralnetworksanddeeplearning.com/chap2.html</span>
         <span class="n">output_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">output_errors</span><span class="p">,</span> <span class="n">hidden_outputs</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
